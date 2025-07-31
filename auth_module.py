@@ -17,6 +17,7 @@ class AuthManager:
         self.auth = firebase.auth()
         self.user_id = None  # Will store userId after login/signup
 
+    #allows user to login
     def login(self, email="", password=""):
         if not email:
             email = input("Email: ")
@@ -29,6 +30,7 @@ class AuthManager:
         except:
             print("Invalid Username or Password. Please try again")
 
+    #allows user to signup
     def signup(self):
         name = input("Name: ")
         email = input("Email: ")

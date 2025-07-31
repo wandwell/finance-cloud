@@ -36,6 +36,7 @@ def showMainMenu(user_id):
         else:
             print("Invalid input. Please try again.")
 
+# main function to start program
 def main():
     authInput = input("Please choose from the following options \n1: Login \n2: Signup \n3: Quit \n")
     user_id = None

@@ -6,10 +6,12 @@ class AssetManager:
         self.db = firestore.client()
         self.refreshAssets()
 
+    # Updats asset list to show lastest updates
     def refreshAssets(self):
         query = self.db.collection("assets").where("userId", "==", self.userId)
         self.assets = list(query.stream())
 
+    #prints a list of the assets
     def listAssets(self):
         self.refreshAssets()
         if not self.assets:
@@ -21,6 +23,7 @@ class AssetManager:
             asset = doc.to_dict()
             print(f"{i}. {asset['name']} | Type: {asset['type']} | Value: ${asset['value']:.2f}")
 
+    #adds asset to firestore
     def addAsset(self):
         print("\n➕ Add New Asset")
         name = input("Asset Name (e.g., Checking Account, Bitcoin): ").strip()
@@ -54,6 +57,7 @@ class AssetManager:
         print(f"✅ Added asset '{name}' worth ${value:.2f}.")
         self.refreshAssets()
 
+    #allows user to choose asset from list
     def chooseAsset(self):
         if not self.assets:
             print("No assets available.")
@@ -81,6 +85,7 @@ class AssetManager:
             print("Please enter a valid number.")
             return None
 
+    #allows user to edit/update assets
     def editAsset(self, asset):
         print(f"\n✏️ Edit Asset: {asset['name']}")
 
@@ -115,6 +120,7 @@ class AssetManager:
         print(f"✅ Asset '{name}' updated.")
         self.refreshAssets()
 
+    #allows user to delet assets
     def deleteAsset(self, asset):
         print(f"\n🗑️ Delete Asset: {asset['name']} (${asset['value']:.2f})")
         confirm = input("Are you sure you want to delete this asset? (y/n): ").strip().lower()
@@ -123,6 +129,7 @@ class AssetManager:
             print("✅ Asset deleted.")
             self.refreshAssets()
 
+    #clears current default account
     def clearExistingDefault(self):
         query = self.db.collection("assets").where("userId", "==", self.userId).where("default", "==", "Y")
         existing_defaults = list(query.stream())
@@ -133,6 +140,7 @@ class AssetManager:
             self.db.collection("assets").document(doc.id).set(asset)
             print(f"🔄 Removed default flag from '{asset['name']}'.")
 
+    #updates asset based on transactions
     def updateByTransaction(self, amount, category):
         # Find default asset
         query = self.db.collection("assets").where("userId", "==", self.userId).where("default", "==", "Y")
@@ -174,7 +182,7 @@ class AssetManager:
         except Exception as e:
             print(f"❌ Failed to update asset: {e}")
             
-
+    #menu for the asset manager
     def assetMenu(self):
         while True:
             choice = input(

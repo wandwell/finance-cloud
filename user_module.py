@@ -14,6 +14,7 @@ def createUser(userId, name, email):
         print(f"Signup error:", e)
         return None
 
+#fetch user by id from firestore database
 def getUser(userId):
     db = firestore.client()
     userDoc = db.collection("users").document(userId).get()

@@ -4,12 +4,14 @@ from asset_module import AssetManager
 from datetime import datetime, date
 from collections import defaultdict
 
+# turns string into date
 def parse_date(date_str):
     try:
         return datetime.strptime(date_str, "%Y-%m-%d").date()
     except ValueError:
         return None
 
+#ensures date string fits required parameters
 def validate_date(input_str):
     try:
         datetime.strptime(input_str, "%Y-%m-%d")
@@ -33,10 +35,12 @@ class TransactionManager:
         if not self.transactions:
             print("No transactions have been entered")
 
+    # ensures program is accessing most current firestore data
     def refreshTransactions(self):
         query = self.db.collection("transactions").where("userId", "==", self.userId)
         self.transactions = list(query.stream())
 
+    #allows user to choose category from a list
     def chooseCategory(self):
         print("\nChoose a category:")
         for i, key in enumerate(self.categoryKeys, start=1):
@@ -56,6 +60,7 @@ class TransactionManager:
             print("Please enter a valid number.")
             return None
 
+    #add transaction to firestore
     def addTransaction(self):
         print("\n📌 Enter New Transaction")
 
@@ -94,6 +99,7 @@ class TransactionManager:
         print(f"✅ Added {category.capitalize()} transaction of ${amount:.2f} on {date}.")
         self.refreshTransactions()
 
+    #allows the user to choose whether to edit or delete transaction
     def editTransactionMenu(self):
         while True:
             transaction = self.chooseTransaction()
@@ -110,6 +116,7 @@ class TransactionManager:
             else:
                 print("Invalid option.")
 
+    #delete transaction from firestore
     def deleteTransaction(self, transaction):
         print("\n🗑️ Delete Transaction")
         print("⚠️ Once deleted, this cannot be undone.")
@@ -120,6 +127,7 @@ class TransactionManager:
             print("✅ Transaction deleted.")
             self.refreshTransactions()
 
+    #updates transaction in firestore
     def editTransaction(self, transaction):
         print("\n✏️ Edit Transaction")
 
@@ -172,6 +180,7 @@ class TransactionManager:
         print(f"✅ Updated {category.capitalize()} transaction of ${amount:.2f} on {date}.")
         self.refreshTransactions()
 
+    #allows user to choose transaction from list
     def chooseTransaction(self):
         if not self.transactions:
             print("No transactions available.")
@@ -199,6 +208,7 @@ class TransactionManager:
             print("Please enter a valid number.")
             return None
 
+    #creates a list of transactions
     def listTransactions(self):
         if not self.transactions:
             print("No transactions to display.")
@@ -209,6 +219,7 @@ class TransactionManager:
             tx = doc.to_dict()
             print(f"- ${tx['amount']:.2f} | {tx['category']} | {tx['date']} | {tx['description']}")
 
+    #summarizes transactions based on time period
     def summarizeTransactions(self, period="weekly"):
         today = date.today()
         summary = defaultdict(float)
@@ -238,6 +249,7 @@ class TransactionManager:
         if summaryInput == "y":
             self.compareBudget(summary, period)
 
+    #allows user to compare current spending to budget
     def compareBudget(self, summary, period):
         print(f"\n📊 Comparing {period} spending to your budget:")
         for category, spent in summary.items():
@@ -250,6 +262,7 @@ class TransactionManager:
             status = "✅ Under Budget" if diff <= 0 else "⚠️ Over Budget"
             print(f"{category.capitalize()}: Spent ${spent:.2f} / Budget ${budgeted:.2f} → {status}")
 
+    #transaction manager menu
     def transactionMenu(self):
         while True:
             menuInput = input(

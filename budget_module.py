@@ -31,6 +31,7 @@ class Budget:
         for key in self.budgetKeys:
             setattr(self, key, self.budgetDict.get(key))
 
+    #allows user to choose a specific category
     def chooseCategory(self):
         print("\nChoose a category to adjust:")
         for i, key in enumerate(self.budgetKeys, start=1):
@@ -52,6 +53,7 @@ class Budget:
             print("Please enter a valid number.")
             return None
 
+    #allows user to view current budget - also functions as the menu
     def viewBudget(self):
         weeklyIncome = self.annIncome / 12
         print(f"\nAvg Weekly Income: ${weeklyIncome:.2f}")
@@ -77,6 +79,7 @@ class Budget:
         else: 
             return
 
+    #change budget based on the percentages
     def changeBudgetPercentage(self):
         print("\n🔧 Update multiple budget categories. Enter 0 to finish.")
         while True:
@@ -104,6 +107,7 @@ class Budget:
         else:
             print("\n⚠️ Percentages do not add up to 100%. Please review your budget.")
 
+    #check that the chosen percentages add up to 100
     def validatePercentages(self):
         total = sum(getattr(self, key) for key in self.budgetKeys)
         if abs(total - 100) <= .001:
@@ -112,6 +116,7 @@ class Budget:
             print(f"\n⚠️ Budget percentages must total 100. Current total: {total}")
             return False
         
+    #change budget based on $ amount
     def changeBudgetAmounts(self, income):
         print("\n Update multiple budget categories. Enter 0 to finish.")
         while True:
@@ -138,6 +143,7 @@ class Budget:
         else:
             print(f"\n⚠️ Amounts do not add up to ${income}. Please review your budget.")
 
+    #save budget to firestore
     def saveBudget(self):
         for key in self.budgetKeys:
             self.budgetDict[key] = getattr(self, key)
@@ -147,6 +153,7 @@ class Budget:
         else:
             self.db.collection("budgets").document(self.budgetId).set(self.budgetDict)
 
+    #get budget amount set for a specific category and time period
     def getCategoryBudget(self, category, period):
         if period == "weekly":
             income = self.annIncome / 52
