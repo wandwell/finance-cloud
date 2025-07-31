@@ -4,7 +4,7 @@ A basic Finance Manager that allows users to keep create a budget, track transac
 
 Made for the purpose of learning how to utilize cloud databases, specifically firebase and firestore.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video]([https://youtu.be/GZEbdH2U78A])
 
 # Cloud Database
 
