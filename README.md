@@ -22,16 +22,11 @@ Pyrebase
 
 # Useful Websites
 
-{Make a list of websites that you found helpful in this project}
-
 - [Google Firebase]([https://firebase.google.com/])
 - [Python Documentation]([https://www.python.org/doc/])
 
 # Future Work
-Create a UI
-Allow for Admin to see data for all users
 
+- Create a UI
+- Allow for Admin to see data for all users
 
-- Item 1
-- Item 2
-- Item 3
